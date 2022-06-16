@@ -1,7 +1,7 @@
 # SNet : An Attention Mechanism Based Malicious URL Classification System
 This repository contains the work carried out by Saket Narendra's for his Master Thesis at Leiden University for the degree of M.Sc. in Computer Science (Specialization in AI)
 
-**Requirements For SNet** <br/>
+**Pre-requisites For SNet** <br/>
 -------------------------
 Python 3.6 <br/>
 tensorflow==0.13.1 <br/>
