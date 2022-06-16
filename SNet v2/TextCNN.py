@@ -12,19 +12,12 @@ class Attention(Layer):
 
     def build(self, input_shape):
         print('input_shape', input_shape)
-        # input()
-
+        
         with tf.variable_scope('ww',reuse=tf.AUTO_REUSE):
 
             self.W = tf.get_variable("ww", shape=(input_shape[-1], 1), initializer=tf.contrib.layers.xavier_initializer())
 
         self.b = tf.Variable(tf.constant(0.1, shape=[1]), name="bw")
-
-        # self.W = self.add_weight(name="att_weight", shape=[input_shape[-1], 1],
-        #                         initializer="normal")
-        # self.b = self.add_weight(name="att_bias", shape=[input_shape[1], 1],
-        #                         initializer="zeros")
-
         super(Attention, self).build(input_shape)
 
     def call(self, x):
@@ -87,15 +80,9 @@ class TextCNN(object):
             if mode == 1 or mode == 3 or mode == 5:
                 self.char_x_expanded = tf.expand_dims(self.embedded_x_char_seq, -1)
 
-            # print("sum_ngram_exp",self.sum_ngram_x_expanded.shape)
-            # input()
-            #
             attention_emb = att_mechanism(self.sum_ngram_x_expanded)
 
             attention_emb2 = att_mechanism(self.char_x_expanded)
-
-            # print("attention emb",attention_emb.shape)
-            # input()
 
             ########################### WORD CONVOLUTION LAYER ################################
         if mode == 2 or mode == 3 or mode == 4 or mode == 5:
@@ -107,18 +94,12 @@ class TextCNN(object):
                     b = tf.Variable(tf.constant(0.1, shape=[256]), name="b")
                     w = tf.Variable(tf.truncated_normal(filter_shape, stddev=0.1), name="w")
                     conv = tf.nn.conv2d(
-                        # self.sum_ngram_x_expanded,
                         attention_emb,
                         w,
                         strides=[1, 1, 32, 1],
                         padding="SAME",
                         name="conv")
-                    # print("conv shape",conv.shape)
-                    # input()
                     h = tf.nn.relu(tf.nn.bias_add(conv, b), name="relu")
-                    # h_attention_word = att_mechanism(tf.reshape(h, [-1, 200, h.shape[-2]]))
-                    # h_attention_word = tf.reshape(h_attention_word, [-1, 200, 1, h_attention_word.shape[-1]])
-                    # print("h_att_word",h_attention_word.shape)
                     pooled = tf.nn.max_pool(
                         # h_attention_word,
                         h,
@@ -127,8 +108,6 @@ class TextCNN(object):
                         padding="VALID",
                         name="pool")
                     pooled_x.append(pooled)
-
-            # h_attention_word = att_mechanism(pooled_x)
             num_filters_total = 256 * len(filter_sizes)
             self.h_pool = tf.concat(pooled_x, 3)
             self.x_flat = tf.reshape(self.h_pool, [-1, num_filters_total], name="pooled_x")
@@ -143,19 +122,12 @@ class TextCNN(object):
                     b = tf.Variable(tf.constant(0.1, shape=[256]), name="b")
                     w = tf.Variable(tf.truncated_normal(filter_shape, stddev=0.1), name="w")
                     conv = tf.nn.conv2d(
-                        # self.char_x_expanded,
                         attention_emb2,
                         w,
                         strides=[1, 1, 32, 1],
                         padding="SAME",
                         name="conv")
                     h = tf.nn.relu(tf.nn.bias_add(conv, b), name="relu")
-                    # print("h_shape",h.shape)
-                    # h_attention = att_mechanism(tf.reshape(h, [-1, 200, h.shape[-2]*h.shape[-1]]))
-                    # h_attention = tf.reshape(h_attention, [-1, 200, 1, h_attention.shape[-1]])
-
-                    # print('h_attention',h_attention.shape)
-
                     pooled = tf.nn.max_pool(
                         h,
                         ksize=[1, char_seq_len, 1, 1],
@@ -163,16 +135,10 @@ class TextCNN(object):
                         padding="VALID",
                         name="pool")
                     pooled_char_x.append(pooled)
-                    # print('pooled_char_x',pooled_char_x[0].shape)
             num_filters_total = 256 * len(filter_sizes)
             self.h_char_pool = tf.concat(pooled_char_x, -1)
-            # self.h_char_pool = tf.concat(pooled_char_x, 2)
-            # print("h_char_pool", self.h_char_pool.shape)
-            # num_filters_total = self.h_char_pool.shape[-2] * self.h_char_pool.shape[-1] #256*len(filter_sizes)
             self.char_x_flat = tf.reshape(self.h_char_pool, [-1, num_filters_total], name="pooled_char_x")
             self.char_h_drop = tf.nn.dropout(self.char_x_flat, self.dropout_keep_prob, name="dropout_char_x")
-            # print("char_h_drop",self.char_h_drop.shape)
-            # input()
 
         ############################### CONCAT WORD AND CHAR BRANCH ############################
         if mode == 3 or mode == 5:
