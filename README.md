@@ -8,8 +8,9 @@ tensorflow==0.13.1 <br/>
 scikit-image==0.14.2 <br/>
 tflearn==0.3.2 <br/>
 tqdm <br/>
-The requirements can also be installed by using `pip install -r requirements.txt`<br/> 
-To create a virtual environment with Python 3.6 follow the instructions below : <br/>
+**OR** <br/>
+The requirements can also be installed by using `pip install -r requirements.txt`<br/> <br/>
+*To create a virtual environment with Python 3.6 follow the instructions below :* <br/>
 `sudo add-apt-repository ppa:deadsnakes/ppa` <br/>
 `sudo apt-get update` <br/>
 `sudo apt-get install python3.6` <br/>
