@@ -1,0 +1,5 @@
+tensorflow==1.13.1
+tflearn==0.3.2
+scikit-image==0.14.2
+tqdm
+numpy
