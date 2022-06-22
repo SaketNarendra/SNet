@@ -1,4 +1,4 @@
-# SNet : An Attention Mechanism Based Malicious URL Classification System
+# SNet : An Attention Mechanism Based Deep Neural Network for URL Classification
 This repository contains the work carried out by Saket Narendra's for his Master Thesis at Leiden University for the degree of M.Sc. in Computer Science (Specialization in AI)
 
 **Pre-requisites For SNet** <br/>
